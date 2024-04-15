@@ -126,7 +126,7 @@ def main():
         elif choice == '3':  # Se l'utente sceglie di inviare un messaggio ai client
             while True:  # Loop per garantire la scelta corretta del tipo di messaggio
                 message = ""
-                message_type = input("1) attacco \n2) conferma\n 3) abort\n> ")  # L'utente specifica il tipo di messaggio
+                message_type = input("1) attacco \n2) conferma\n3) abort\n> ")  # L'utente specifica il tipo di messaggio
                 clear()  # Pulisce lo schermo
 
                 if message_type == "1":  # Se l'utente sceglie di inviare un messaggio di attacco
@@ -135,7 +135,7 @@ def main():
                     threads = input("Numero di thread: ")  # L'utente specifica il numero di thread
                     method = ""
                     while True:
-                        method = input("1) TCP FLOOD\n 2) UDP FLOOD\n 3) HTTP FLOOD\n> ")
+                        method = input("1) TCP FLOOD\n2) UDP FLOOD\n3) HTTP FLOOD\n> ")
                         if method == "1":
                             method = "TCP_FLOOD"
                             break
@@ -155,6 +155,7 @@ def main():
                     break  # Esce dal loop interno
                 elif message_type == "2":
                     send_message_to_clients("confirm")
+                    break
                 else:
                     print("Tipo di messaggio non valido.")  # Se l'utente inserisce un tipo di messaggio non valido
 

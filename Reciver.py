@@ -68,14 +68,11 @@ def receive_messages_from_server(client_socket):
                 METODO: {METHOD}
                 """)
         elif TYPE == "confirm":
-            pass # TODO ingaggiare l'attacco
+            print("confirm") # TODO ingaggiare l'attacco
         elif TYPE == "abort":
             print("Terminating attack.")
         else:
             pass
-
-        # Invia conferma al server
-        client_socket.send("Conferma ricezione".encode('utf-8'))
 
 # Funzione principale del client
 def start_client(host, port):
