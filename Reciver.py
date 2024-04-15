@@ -11,8 +11,6 @@ def receive_messages_from_server(client_socket):
         if not message:
             print("Il server si è disconnesso.")
             break
-
-        # Stampa il messaggio ricevuto
         print("Messaggio dal server:", message)
 
         # Invia conferma al server
@@ -36,4 +34,4 @@ def start_client(host, port):
 
 # Avvia il client
 if __name__ == "__main__":
-    start_client('127.0.0.1', 5555)
+    start_client('10.0.0.100', 20000)

