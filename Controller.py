@@ -166,8 +166,8 @@ try:
                         print("Tipo di messaggio non valido.")  # Se l'utente inserisce un tipo di messaggio non valido
 
             elif choice == '4':
-                    for addr, i in clients_addr, len(clients_addr):
-                        print(f"Client {i}: {addr}")
+                    for i in len(clients_addr):
+                        print(f"Client {i}: {clients_addr[i]}")
             
             elif choice == '0':  # Se l'utente sceglie di uscire dal programma
                 stop_server()  # Ferma il server
