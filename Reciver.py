@@ -49,7 +49,11 @@ class Attack:
     
     tm = ThreadManager.__init__()
     
-    def init(str(attack_method), int())
+    def init():
+        if METHOD == "TCP_FLOOD":
+            threads = int(THREADS)
+            for i in range(threads):
+                
     
     def TCP_FLOOD():
         pass
